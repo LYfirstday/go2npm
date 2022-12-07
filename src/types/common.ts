@@ -1,5 +1,5 @@
-/** The go project github repo config */
-export type GoBinary = {
+/** The golang project github repo config */
+export type Go2npm = {
   /** Github account username */
   username: string;
   /** The repo name, where the go project binary file is */
@@ -12,7 +12,7 @@ export type GoBinary = {
    * */
   tagName?: string;
   version: string;
-  /** Golang's binary file name */
+  /** Golang's binary file name which npm call command name */
   name: string;
 };
 
@@ -27,6 +27,7 @@ export type Assets = {
   size: number;
   browser_download_url: string;
 };
+
 export type RepoReleaseList = {
   url: string;
   id: number;

@@ -1,13 +1,13 @@
-import { GoBinary, RepoReleaseList } from "./../types/common";
+import { Go2npm, RepoReleaseList } from "./../types/common";
 import { GITHUB_API_PREFIX } from "./../constants/common";
 import axios from 'axios';
 import request from 'request';
 import zlib from 'zlib';
 import tar from 'tar';
-import * as fs from 'fs';
+import fs from 'fs';
 var ProgressBar = require('progress');
 
-class GithubRepo {
+class GolangGithubRepo {
   username: string;
   repoName: string;
   githubToken: string | undefined;
@@ -20,7 +20,7 @@ class GithubRepo {
   jsonHeaders: {[key: string] : string};
   streamHeaders: {[key: string] : string};
 
-  constructor(initData: GoBinary) {
+  constructor(initData: Go2npm) {
     this.username = initData.username;
     this.repoName = initData.repoName;
     this.version = initData.version;
@@ -98,13 +98,13 @@ class GithubRepo {
     });
   };
 
-  removeBinaryFileFromLocal = (binDir: string) => {
-    console.log('Removing: ', this.name);
-    fs.unlink(binDir, err => {
+  removeBinaryFile = (binDir: string) => {
+    console.log('Removing file: ', this.name);
+    fs.unlink(`${binDir}/${this.name}`, err => {
       if (err) throw err;
       console.log('Uninstalled ', this.name);
     });
   }
 }
 
-export default GithubRepo;
+export default GolangGithubRepo;

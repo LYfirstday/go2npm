@@ -1,35 +1,43 @@
 #!/usr/bin/env node
 import { ARCH_MAPPING, PLATFORM_MAPPING } from "./constants/common";
+import { getBinDirWhenInstall } from "./utils/getBinDirWhenInstall";
+import { getGlobalBinDirPath } from "./utils/getGlobalBinDirPath";
+import { getLocalBinDirPath } from "./utils/getLocalBinDirPath";
 import parsePackageJson from "./utils/parsePackageJson";
-
-const getBinDir = (): string => {
-  const cmd = process.cwd();
-  const projectDir = cmd.split('/node_modules')[0];
-  const localBinDir = `${projectDir}/node_modules/.bin`;
-  return localBinDir;
-};
+import fs from 'fs';
 
 const uninstall = () => {
   const file = parsePackageJson();
-  const localBinDir = getBinDir();
-  file?.removeBinaryFileFromLocal(localBinDir);
+  const localBinDirPath = getLocalBinDirPath();
+  const globalBinDirPath = getGlobalBinDirPath();
+  fs.access(`${localBinDirPath}/${file?.name}`, fs.constants.F_OK, err => {
+    if (err) {
+      fs.access(`${globalBinDirPath}/${file?.name}`, fs.constants.F_OK, error => {
+        if (!error) {
+          file?.removeBinaryFile(globalBinDirPath);
+        }
+      });
+    } else {
+      file?.removeBinaryFile(localBinDirPath);
+    }
+  });
 };
 
 const install = async () => {
-  const file = parsePackageJson();
-  const thisTagRelease = await file?.getRepoRelease();
+  const golangRepo = parsePackageJson();
+  const thisTagRelease = await golangRepo?.getRepoRelease();
   if (thisTagRelease) {
-    const localBinDir = getBinDir();
-    const binaryFileName = `${file?.repoName}_${file?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
+    const localBinDir = getBinDirWhenInstall();
+    const binaryFileName = `${golangRepo?.repoName}_${golangRepo?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
     const binaryFileRequestUrl = thisTagRelease.assets.filter(item => item.name === binaryFileName)[0]?.url;
     if (!binaryFileRequestUrl) {
       console.log(`No such file in this repo: ${binaryFileName}`);
-      console.log('Repo Name: ', file?.repoName);
-      console.log('Tag Name: ', file?.tagName || '');
-      console.log('Version: ', file?.version);
+      console.log('Repo Name: ', golangRepo?.repoName);
+      console.log('Tag Name: ', golangRepo?.tagName || '');
+      console.log('Version: ', golangRepo?.version);
       return;
     } else {
-      file?.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir, binaryFileName);
+      golangRepo?.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir, binaryFileName);
     }
   }
 };
