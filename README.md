@@ -44,6 +44,7 @@ Add a property to the package.json named  ‘go2npm’  like this:
 | githubToken | false       | If your golang's repositry is private, need this value       |
 | name        | true        | Golang's binary file name, the command use at npm            |
 
+[How to create github token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 #### Step 3
 
 Publish your npm app!

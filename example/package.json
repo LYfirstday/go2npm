@@ -1,0 +1,19 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "go2npm": {
+    "username": "goreleaser",
+    "repoName": "example",
+    "tagName": "v1.3.0",
+    "version": "1.3.0",
+    "name": "example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
