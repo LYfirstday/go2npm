@@ -1,10 +1,11 @@
 {
-  "name": "example",
+  "name": "go2npm-example",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "go2npm install",
+    "preuninstall": "go2npm uninstall"
   },
   "go2npm": {
     "username": "goreleaser",

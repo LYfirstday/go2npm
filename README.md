@@ -33,6 +33,17 @@ Add a property to the package.json named  ‘go2npm’  like this:
   }
   ...
 }
+Add two script commands to the package.json like this:
+```json
+{
+  ...
+  "script": {
+    "postinstall": "go2npm install",
+    "preuninstall": "go2npm uninstall"
+  }
+  ...
+}
+
 ```
 
 | Property    | Is required | Description                                                  |
