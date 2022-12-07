@@ -1,0 +1,21 @@
+{
+  /* 编译选项 */
+  "compilerOptions": {
+    "target": "ES2015",
+    "lib": ["ESNext"],
+    // "importHelpers": true,
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "outDir": "bin",
+    "strict": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"],
+      "@/*": ["src/*"]
+    },
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
