@@ -33,7 +33,10 @@ Add a property to the package.json named  ‘go2npm’  like this:
   }
   ...
 }
+```
+
 Add two script commands to the package.json like this:
+
 ```json
 {
   ...
