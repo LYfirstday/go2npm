@@ -52,7 +52,7 @@ const argv = process.argv;
 if (argv && argv.length > 2) {
   const cmd = process.argv[2];
   if (!actions[cmd]) {
-      console.log("Invalid command to go-npm. `install` and `uninstall` are the only supported commands");
+      console.log("Invalid command to go2npm. `install` and `uninstall` are the only supported commands");
       process.exit(1);
   }
 
