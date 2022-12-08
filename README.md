@@ -9,7 +9,9 @@ Go2npm is a tool that helps you integrate golang binary packages into npm；when
 If, for example, you already have successfully released golang binary and have them managed in github.
 
 And your golang binary names should follow this specification：
+```text
 {{username}}_{{version}}_{{platform}}_{{arch}}.tar.gz
+```
 
 If you use [goreleaser](https://github.com/goreleaser) package your program, it will automatically write each parameter.
 
@@ -59,7 +61,7 @@ Add two commands to the script property in package.json, and add go2npm to the d
     "preuninstall": "go2npm uninstall"
   },
   "devDependencies": {
-    "go2npm": "^1.0.1"
+    "go2npm": "^1.0.4"
   }
 }
 ```

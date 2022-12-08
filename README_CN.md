@@ -9,7 +9,9 @@ go2npm是一个帮助你将golang二进制程序包集成到npm的一个工具�
 假如，你已经有了成功发布的golang二进制程序包，并且将它们放在了github仓库中管理
 
 你的golang程序包名称应该遵循这样的规范：
+```text
 {{username}}_{{version}}_{{platform}}_{{arch}}.tar.gz
+```
 
 如果你使用 [goreleaser](https://github.com/goreleaser) 打包你的程序，它会自动将各个参数写好并发布。
 
@@ -40,12 +42,12 @@ npm init -y
 
 | Property    | Is required | Description                                                  |
 | ----------- | :---------- | ------------------------------------------------------------ |
-| username    | true        | Github account username                                      |
-| repoName    | true        | Your golang repository's name                                |
-| tagName     | true        | Which tag version do you want to download from the golong’s repository |
-| version     | true        | Your golang release version which you want to download       |
-| githubToken | false       | If your golang's repositry is private, need this value       |
-| name        | true        | Golang's binary file name, the command use at npm            |
+| username    | true        | Github账户名称                                                 |
+| repoName    | true        | golang仓库名称                                                 |
+| tagName     | true        | golang程序包发布时设置的tag值                                    |
+| version     | true        | golang程序发布时的版本号       |
+| githubToken | false       | 如果你的golang仓库是私有的，需要填写这个属性值用于请求仓库文件读的权限      |
+| name        | true        | golang二进制包名，也就是在npm中使用时需要调用的命令名            |
 
 [如何创建github token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
