@@ -4,7 +4,7 @@
 
 Go2npm is a tool that helps you integrate golang binary packages into npm；when golang programs are packaged and compiled, they are usually cross-compiled, we should use different binary packages for different operating systems，go2npm will automatically match the corresponding binary package to the user's operating system，Download it to npm local or global dependencies, supports downloading binaries from public, private repositories.
 
-## 如何使用go2npm
+## How to use go2npm
 
 If, for example, you already have successfully released golang binary and have them managed in github.
 
@@ -49,7 +49,7 @@ Add a property to package.json called go2npm:
 
 [How to create github token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-### 第三步
+### Step three
 
 Add two commands to the script property in package.json, and add go2npm to the devDependencies:
 ```json
