@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { ARCH_MAPPING, PLATFORM_MAPPING } from "./constants/common";
+import { ARCH_MAPPING, FileUriSeparator, PLATFORM_MAPPING } from "./constants/common";
 import { getBinDirWhenInstall } from "./utils/getBinDirWhenInstall";
 import { getGlobalBinDirPath } from "./utils/getGlobalBinDirPath";
 import { getLocalBinDirPath } from "./utils/getLocalBinDirPath";
@@ -10,9 +10,9 @@ const uninstall = () => {
   const file = parsePackageJson();
   const localBinDirPath = getLocalBinDirPath();
   const globalBinDirPath = getGlobalBinDirPath();
-  fs.access(`${localBinDirPath}/${file?.name}`, fs.constants.F_OK, err => {
+  fs.access(`${localBinDirPath}${FileUriSeparator}${file?.name}`, fs.constants.F_OK, err => {
     if (err) {
-      fs.access(`${globalBinDirPath}/${file?.name}`, fs.constants.F_OK, error => {
+      fs.access(`${globalBinDirPath}${FileUriSeparator}${file?.name}`, fs.constants.F_OK, error => {
         if (!error) {
           file?.removeBinaryFile(globalBinDirPath);
         }
@@ -24,12 +24,15 @@ const uninstall = () => {
 };
 
 const install = async () => {
+  console.log('Into install ----> ');
   const golangRepo = parsePackageJson();
   const thisTagRelease = await golangRepo?.getRepoRelease();
+  console.log('Get tag and release info --------->');
   if (thisTagRelease) {
     const localBinDir = getBinDirWhenInstall();
     const binaryFileName = `${golangRepo?.repoName}_${golangRepo?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
     const binaryFileRequestUrl = thisTagRelease.assets.filter(item => item.name === binaryFileName)[0]?.url;
+    console.log('binaryFileName --------> ', binaryFileName);
     if (!binaryFileRequestUrl) {
       console.log(`No such file in this repo: ${binaryFileName}`);
       console.log('Repo Name: ', golangRepo?.repoName);

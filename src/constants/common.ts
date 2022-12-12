@@ -13,3 +13,7 @@ export const PLATFORM_MAPPING = {
 };
 
 export const GITHUB_API_PREFIX = 'https://api.github.com/repos';
+
+console.log('platform ------->', process.platform);
+
+export const FileUriSeparator = process.platform === 'win32' ? '\\' : '/';

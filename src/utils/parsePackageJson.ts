@@ -57,7 +57,7 @@ const parsePackageJson = (): GolangGithubRepo | undefined => {
     console.error("Invalid package.json: " + error);
     return;
   }
-
+  console.log('Parse json and create GolangGithubRepo ------>');
   return new GolangGithubRepo(packageJson.go2npm);
 }
 
