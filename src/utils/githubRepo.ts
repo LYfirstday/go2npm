@@ -73,6 +73,7 @@ class GolangGithubRepo {
       uri: requestUrl,
       headers: this.streamHeaders
     });
+    console.log('Downloading path ------>', targetPath);
     let bar: any;
     req.on('response', function(res) {
       const contentLen = Number(res.headers["content-length"] || 0);
