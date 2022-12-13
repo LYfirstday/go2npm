@@ -1,6 +1,6 @@
 {
   "name": "go2npm",
-  "version": "1.0.0",
+  "version": "1.0.6-beta.5",
   "description": "Distribute and install Go binaries via NPM",
   "main": "index.js",
   "bin": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "prepublish": "npm run build",
-    "build": "tsc"
+    "build": "tsc",
+    "go": "node index"
   },
   "browser": {
     "fs": false,

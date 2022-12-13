@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { ARCH_MAPPING, PLATFORM_MAPPING } from "./constants/common";
+import { ARCH_MAPPING, FileUriSeparator, PLATFORM_MAPPING } from "./constants/common";
 import { getBinDirWhenInstall } from "./utils/getBinDirWhenInstall";
 import { getGlobalBinDirPath } from "./utils/getGlobalBinDirPath";
 import { getLocalBinDirPath } from "./utils/getLocalBinDirPath";
@@ -10,9 +10,9 @@ const uninstall = () => {
   const file = parsePackageJson();
   const localBinDirPath = getLocalBinDirPath();
   const globalBinDirPath = getGlobalBinDirPath();
-  fs.access(`${localBinDirPath}/${file?.name}`, fs.constants.F_OK, err => {
+  fs.access(`${localBinDirPath}${FileUriSeparator}${file?.name}`, fs.constants.F_OK, err => {
     if (err) {
-      fs.access(`${globalBinDirPath}/${file?.name}`, fs.constants.F_OK, error => {
+      fs.access(`${globalBinDirPath}${FileUriSeparator}${file?.name}`, fs.constants.F_OK, error => {
         if (!error) {
           file?.removeBinaryFile(globalBinDirPath);
         }
@@ -52,7 +52,7 @@ const argv = process.argv;
 if (argv && argv.length > 2) {
   const cmd = process.argv[2];
   if (!actions[cmd]) {
-      console.log("Invalid command to go-npm. `install` and `uninstall` are the only supported commands");
+      console.log("Invalid command to go2npm. `install` and `uninstall` are the only supported commands");
       process.exit(1);
   }
 
