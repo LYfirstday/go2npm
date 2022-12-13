@@ -12,7 +12,8 @@ export const getBinDirWhenInstall = (): string => {
     npm_config_argv &&
       (npm_config_argv.includes('--global') ||
        npm_config_argv.includes('-g') ||
-       npm_config_argv.includes('-G')
+       npm_config_argv.includes('-G') ||
+       npm_config_argv.includes('global')
       )) {
     return getGlobalBinDirPath();
   }
