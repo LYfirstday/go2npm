@@ -63,7 +63,7 @@ class GolangGithubRepo {
   downloadBinaryToLocal = async (requestUrl: string, targetPath: string, fileName: string) => {
     const _this = this;
     const ungz = zlib.createGunzip();
-    const untar = tar.Extract({path: targetPath});
+    const untar = tar.Extract({ path: targetPath, newer: true });
 
     untar.on('error', () => {
       console.log('Decompression failure: ', _this.name);
@@ -73,6 +73,7 @@ class GolangGithubRepo {
       uri: requestUrl,
       headers: this.streamHeaders
     });
+    console.log('Downloading path ------>', targetPath);
     let bar: any;
     req.on('response', function(res) {
       const contentLen = Number(res.headers["content-length"] || 0);
