@@ -28,7 +28,7 @@ const install = async () => {
   const thisTagRelease = await golangRepo?.getRepoRelease();
   if (thisTagRelease) {
     const localBinDir = getBinDirWhenInstall();
-    const binaryFileName = `${golangRepo?.repoName}_${golangRepo?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
+    const binaryFileName = `${golangRepo?.name}_${golangRepo?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
     const binaryFileRequestUrl = thisTagRelease.assets.filter(item => item.name === binaryFileName)[0]?.url;
     if (!binaryFileRequestUrl) {
       console.log(`No such file in this repo: ${binaryFileName}`);
