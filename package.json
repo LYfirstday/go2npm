@@ -1,16 +1,11 @@
 {
   "name": "go2npm",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Distribute and install Go binaries via NPM",
   "main": "index.js",
   "bin": {
     "go2npm": "./bin/index.js"
   },
-  "keywords": [
-    "go to npm",
-    "golang to npm",
-    "go npm"
-  ],
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc"
@@ -26,6 +21,11 @@
     "type": "git",
     "url": "https://github.com/LYfirstday/go2npm.git"
   },
+  "keywords": [
+    "go to npm",
+    "golang to npm",
+    "go npm"
+  ],
   "homepage": "https://github.com/LYfirstday/go2npm",
   "dependencies": {
     "axios": "^0.19.0",
