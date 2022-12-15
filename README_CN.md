@@ -89,3 +89,6 @@ yarn add [your npm app name] [-g]
 ```
 
 如果你使用windows系统下载golang二进制文件，请务必使用-g参数，下载到全局依赖中，npx [command] 无法执行本地node_modules/.bin/ 下的命令；macOS本地全局命令都可以执行。
+
+## LICENSE
+MIT
