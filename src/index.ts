@@ -24,15 +24,12 @@ const uninstall = () => {
 };
 
 const install = async () => {
-  console.log('Into install ----> ');
   const golangRepo = parsePackageJson();
   const thisTagRelease = await golangRepo?.getRepoRelease();
-  console.log('Get tag and release info --------->');
   if (thisTagRelease) {
     const localBinDir = getBinDirWhenInstall();
     const binaryFileName = `${golangRepo?.repoName}_${golangRepo?.version}_${PLATFORM_MAPPING[process.platform]}_${ARCH_MAPPING[process.arch]}.tar.gz`;
     const binaryFileRequestUrl = thisTagRelease.assets.filter(item => item.name === binaryFileName)[0]?.url;
-    console.log('binaryFileName --------> ', binaryFileName);
     if (!binaryFileRequestUrl) {
       console.log(`No such file in this repo: ${binaryFileName}`);
       console.log('Repo Name: ', golangRepo?.repoName);
