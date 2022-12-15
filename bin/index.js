@@ -42,7 +42,7 @@ const install = () => __awaiter(void 0, void 0, void 0, function* () {
     const thisTagRelease = yield (golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.getRepoRelease());
     if (thisTagRelease) {
         const localBinDir = (0, getBinDirWhenInstall_1.getBinDirWhenInstall)();
-        const binaryFileName = `${golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.repoName}_${golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.version}_${common_1.PLATFORM_MAPPING[process.platform]}_${common_1.ARCH_MAPPING[process.arch]}.tar.gz`;
+        const binaryFileName = `${golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.name}_${golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.version}_${common_1.PLATFORM_MAPPING[process.platform]}_${common_1.ARCH_MAPPING[process.arch]}.tar.gz`;
         const binaryFileRequestUrl = (_a = thisTagRelease.assets.filter(item => item.name === binaryFileName)[0]) === null || _a === void 0 ? void 0 : _a.url;
         if (!binaryFileRequestUrl) {
             console.log(`No such file in this repo: ${binaryFileName}`);
