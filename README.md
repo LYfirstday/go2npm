@@ -89,3 +89,6 @@ yarn add [your npm app name] [-g]
 ```
 
 If you use windows to download the golang binaries, be sure to use the -g parameter to download to the global dependencies. npx [command] cannot execute commands under local node_modules/.bin/; macOS local global commands can be executed.
+
+## license
+MIT

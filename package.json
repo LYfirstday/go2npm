@@ -1,12 +1,16 @@
 {
   "name": "go2npm",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Distribute and install Go binaries via NPM",
   "main": "index.js",
   "bin": {
     "go2npm": "./bin/index.js"
   },
-  "keywords": ["go to npm", "golang to npm", "go npm"],
+  "keywords": [
+    "go to npm",
+    "golang to npm",
+    "go npm"
+  ],
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc"
