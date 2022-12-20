@@ -7,4 +7,4 @@ Run:
 yarn or npm install
 ```
 
-And then you will find the binary file named example at: /node_modules/.bin
+And then you will find the binary file named ‘example’ at: /node_modules/.bin

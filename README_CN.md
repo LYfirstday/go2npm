@@ -10,7 +10,7 @@ go2npm是一个帮助你将golang二进制程序包集成到npm的一个工具�
 
 你的golang程序包名称应该遵循这样的规范：
 ```text
-{{username}}_{{version}}_{{platform}}_{{arch}}.tar.gz
+{{name}}_{{version}}_{{platform}}_{{arch}}.tar.gz
 ```
 
 如果你使用 [goreleaser](https://github.com/goreleaser) 打包你的程序，它会自动将各个参数写好并发布。
@@ -61,7 +61,7 @@ npm init -y
     "preuninstall": "go2npm uninstall"
   },
   "devDependencies": {
-    "go2npm": "^1.0.1"
+    "go2npm": "^1.2.4"
   }
 }
 ```
@@ -88,7 +88,15 @@ Use yarn
 yarn add [your npm app name] [-g]
 ```
 
-如果你使用windows系统下载golang二进制文件，请务必使用-g参数，下载到全局依赖中，npx [command] 无法执行本地node_modules/.bin/ 下的命令；macOS本地全局命令都可以执行。
+如果安装到本地npm依赖，执行:
+```shell
+npx [binary-name] [options]
+```
+
+如果安装到全局依赖中，执行:
+```shell
+[binary-name] [options]
+```
 
 ## license
 MIT

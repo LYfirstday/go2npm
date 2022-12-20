@@ -10,7 +10,7 @@ If, for example, you already have successfully released golang binary and have t
 
 And your golang binary names should follow this specification：
 ```text
-{{username}}_{{version}}_{{platform}}_{{arch}}.tar.gz
+{{name}}_{{version}}_{{platform}}_{{arch}}.tar.gz
 ```
 
 If you use [goreleaser](https://github.com/goreleaser) package your program, it will automatically write each parameter.
@@ -61,7 +61,7 @@ Add two commands to the script property in package.json, and add go2npm to the d
     "preuninstall": "go2npm uninstall"
   },
   "devDependencies": {
-    "go2npm": "^1.0.5"
+    "go2npm": "^1.2.4"
   }
 }
 ```
@@ -88,7 +88,16 @@ Use yarn
 yarn add [your npm app name] [-g]
 ```
 
-If you use windows to download the golang binaries, be sure to use the -g parameter to download to the global dependencies. npx [command] cannot execute commands under local node_modules/.bin/; macOS local global commands can be executed.
+
+If you installed in local npm dependency, execute command:
+```shell
+npx [binary-name] [options]
+```
+
+If you installed in global npm dependency, execute command:
+```shell
+[binary-name] [options]
+```
 
 ## license
 MIT
