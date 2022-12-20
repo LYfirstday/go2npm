@@ -7,26 +7,28 @@ import tar from 'tar';
 import fs from 'fs';
 var ProgressBar = require('progress');
 
-const windowsBinContent = `
-  #!/usr/bin/env node
-  const path = require('path');
-  const process = require('process');
+const windowsBinContent = (name: string) => {
+  return `
+    #!/usr/bin/env node
+    const path = require('path');
+    const process = require('process');
 
-  function executor() {
-    const exec = require('child_process').exec;
-    const args = process.argv;
-    const params = args.splice(2).join(' ');
-    const url = path.resolve(__dirname, './node_modules/.bin/weeego.exe' + params);
-    exec(url, function(err, out) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(out);
-    });
-  }
+    function executor() {
+      const exec = require('child_process').exec;
+      const args = process.argv;
+      const params = args.splice(2).join(' ');
+      const url = path.resolve(__dirname, './node_modules/.bin/${name}.exe' + params);
+      exec(url, function(err, out) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(out);
+      });
+    }
 
-  executor();
-`;
+    executor();
+  `;
+};
 
 class GolangGithubRepo {
   username: string;
@@ -121,7 +123,7 @@ class GolangGithubRepo {
     const os = process.platform;
     if (os === 'win32') {
       const filename = `${targetPath}\\${_this.name}`;
-      fs.writeFile(filename, windowsBinContent, {flag: 'a'}, (err) => {
+      fs.writeFile(filename, windowsBinContent(_this.name), {flag: 'a'}, (err) => {
         if (err) {
           console.log('Error: ', err);
         }
