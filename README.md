@@ -61,7 +61,7 @@ Add two commands to the script property in package.json, and add go2npm to the d
     "preuninstall": "go2npm uninstall"
   },
   "devDependencies": {
-    "go2npm": "^1.2.5"
+    "go2npm": "^1.2.6"
   }
 }
 ```
