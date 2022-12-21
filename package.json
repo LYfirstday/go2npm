@@ -1,6 +1,6 @@
 {
   "name": "go2npm",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Distribute and install Go binaries via NPM",
   "main": "index.js",
   "bin": {
