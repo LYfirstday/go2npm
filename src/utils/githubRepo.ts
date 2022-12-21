@@ -83,7 +83,7 @@ class GolangGithubRepo {
     }
   };
 
-  downloadBinaryToLocal = async (requestUrl: string, targetPath: string, fileName: string) => {
+  downloadBinaryToLocal = async (requestUrl: string, targetPath: string, isGlobal: boolean) => {
     const _this = this;
     const ungz = zlib.createGunzip();
     const untar = tar.Extract({ path: targetPath, newer: true });
@@ -121,7 +121,7 @@ class GolangGithubRepo {
     });
 
     const os = process.platform;
-    if (os === 'win32') {
+    if (os === 'win32' && !isGlobal) {
       const filename = `${targetPath}\\${_this.name}`;
       fs.writeFile(filename, windowsBinContent(_this.name), {flag: 'a'}, (err) => {
         if (err) {

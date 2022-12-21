@@ -37,7 +37,7 @@ const install = async () => {
       console.log('Version: ', golangRepo?.version);
       return;
     } else {
-      golangRepo?.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir, binaryFileName);
+      golangRepo?.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir.path, localBinDir.isGlobal);
     }
   }
 };
