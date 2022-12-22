@@ -4,8 +4,8 @@ import axios from 'axios';
 import request from 'request';
 import zlib from 'zlib';
 import fs from 'fs';
-import tarStream from 'tar-stream'
-
+import tarStream from 'tar-stream';
+import tar from 'tar';
 import ProgressBar from 'progress';
 
 const windowsBinContent = (name: string) => {
@@ -87,30 +87,36 @@ class GolangGithubRepo {
   downloadBinaryToLocal = async (requestUrl: string, targetPath: string, isGlobal: boolean) => {
     const _this = this;
     const ungz = zlib.createGunzip();
+    const os = process.platform;
+    let extract: any;
 
-    const extract = tarStream.extract();
-    /** save the golang binary file data */
-    let chunks = Buffer.from([]);
-    /** save the binary name */
-    let exeName = '';
-    extract.on('entry', function(header, stream, cb) {
-      exeName = header.name;
-      stream.on('data', function(chunk) {
-        chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
-      });
-
-      stream.on('end', function() {
+    if (os === 'win32') {
+      extract = tarStream.extract();
+      /** save the golang binary file data */
+      let chunks = Buffer.from([]);
+      /** save the binary name */
+      let exeName = '';
+      extract.on('entry', function(header, stream, cb) {
+        exeName = header.name;
+        stream.on('data', function(chunk) {
+          chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
+        });
+  
+        stream.on('end', function() {
           cb();
+        });
+  
+        stream.resume();
       });
-
-      stream.resume();
-    });
-
-    extract.on('finish', function() {
-      fs.writeFile(`${targetPath}${FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
-        console.log('Write file error: ', err);
+  
+      extract.on('finish', function() {
+        fs.writeFile(`${targetPath}${FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
+          console.log('Write file error: ', err);
+        });
       });
-    });
+    } else {
+      extract = tar.Extract({ path: targetPath, newer: true });
+    }
 
     const req = request.get({
       uri: requestUrl,
@@ -140,7 +146,6 @@ class GolangGithubRepo {
       console.log(`Download the ${_this.name} completed!`);
     });
 
-    const os = process.platform;
     if (os === 'win32' && !isGlobal) {
       const filename = `${targetPath}\\${_this.name}`;
       fs.writeFile(filename, windowsBinContent(_this.name), {flag: 'a'}, (err) => {

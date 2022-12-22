@@ -18,6 +18,7 @@ const request_1 = __importDefault(require("request"));
 const zlib_1 = __importDefault(require("zlib"));
 const fs_1 = __importDefault(require("fs"));
 const tar_stream_1 = __importDefault(require("tar-stream"));
+const tar_1 = __importDefault(require("tar"));
 const progress_1 = __importDefault(require("progress"));
 const windowsBinContent = (name) => {
     return `
@@ -62,26 +63,33 @@ class GolangGithubRepo {
         this.downloadBinaryToLocal = (requestUrl, targetPath, isGlobal) => __awaiter(this, void 0, void 0, function* () {
             const _this = this;
             const ungz = zlib_1.default.createGunzip();
-            const extract = tar_stream_1.default.extract();
-            /** save the golang binary file data */
-            let chunks = Buffer.from([]);
-            /** save the binary name */
-            let exeName = '';
-            extract.on('entry', function (header, stream, cb) {
-                exeName = header.name;
-                stream.on('data', function (chunk) {
-                    chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
+            const os = process.platform;
+            let extract;
+            if (os === 'win32') {
+                extract = tar_stream_1.default.extract();
+                /** save the golang binary file data */
+                let chunks = Buffer.from([]);
+                /** save the binary name */
+                let exeName = '';
+                extract.on('entry', function (header, stream, cb) {
+                    exeName = header.name;
+                    stream.on('data', function (chunk) {
+                        chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
+                    });
+                    stream.on('end', function () {
+                        cb();
+                    });
+                    stream.resume();
                 });
-                stream.on('end', function () {
-                    cb();
+                extract.on('finish', function () {
+                    fs_1.default.writeFile(`${targetPath}${common_1.FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
+                        console.log('Write file error: ', err);
+                    });
                 });
-                stream.resume();
-            });
-            extract.on('finish', function () {
-                fs_1.default.writeFile(`${targetPath}${common_1.FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
-                    console.log('Write file error: ', err);
-                });
-            });
+            }
+            else {
+                extract = tar_1.default.Extract({ path: targetPath, newer: true });
+            }
             const req = request_1.default.get({
                 uri: requestUrl,
                 headers: this.streamHeaders
@@ -110,7 +118,6 @@ class GolangGithubRepo {
             req.on('complete', () => {
                 console.log(`Download the ${_this.name} completed!`);
             });
-            const os = process.platform;
             if (os === 'win32' && !isGlobal) {
                 const filename = `${targetPath}\\${_this.name}`;
                 fs_1.default.writeFile(filename, windowsBinContent(_this.name), { flag: 'a' }, (err) => {
