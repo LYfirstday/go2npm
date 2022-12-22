@@ -12,8 +12,14 @@ const getBinDirWhenInstall = () => {
             npm_config_argv.includes('-g') ||
             npm_config_argv.includes('-G') ||
             npm_config_argv.includes('global'))) {
-        return (0, getGlobalBinDirPath_1.getGlobalBinDirPath)();
+        return {
+            path: (0, getGlobalBinDirPath_1.getGlobalBinDirPath)(),
+            isGlobal: true,
+        };
     }
-    return (0, getLocalBinDirPath_1.getLocalBinDirPath)();
+    return {
+        path: (0, getLocalBinDirPath_1.getLocalBinDirPath)(),
+        isGlobal: false,
+    };
 };
 exports.getBinDirWhenInstall = getBinDirWhenInstall;

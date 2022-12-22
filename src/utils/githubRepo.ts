@@ -50,11 +50,11 @@ class GolangGithubRepo {
     this.name = initData.name;
     const jsonH = {
       "Accept": "application/json, text/plain; charset=UTF-8",
-      "User-Agent": 'weeego'
+      "User-Agent": 'wego'
     };
     const streamH = {
       "Accept": "application/octet-stream; charset=UTF-8",
-      "User-Agent": 'weeego'
+      "User-Agent": 'wego'
     };
     if (initData.githubToken) {
       this.githubToken = initData.githubToken;

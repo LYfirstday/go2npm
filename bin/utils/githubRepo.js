@@ -19,6 +19,28 @@ const zlib_1 = __importDefault(require("zlib"));
 const tar_1 = __importDefault(require("tar"));
 const fs_1 = __importDefault(require("fs"));
 var ProgressBar = require('progress');
+const windowsBinContent = (name) => {
+    return `
+    #!/usr/bin/env node
+    const path = require('path');
+    const process = require('process');
+
+    function executor() {
+      const exec = require('child_process').exec;
+      const args = process.argv;
+      const params = args.splice(2).join(' ');
+      const url = path.resolve(__dirname, './node_modules/.bin/${name}.exe' + params);
+      exec(url, function(err, out) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(out);
+      });
+    }
+
+    executor();
+  `;
+};
 class GolangGithubRepo {
     constructor(initData) {
         /** Is it private repo */
@@ -37,7 +59,7 @@ class GolangGithubRepo {
                 return;
             }
         });
-        this.downloadBinaryToLocal = (requestUrl, targetPath, fileName) => __awaiter(this, void 0, void 0, function* () {
+        this.downloadBinaryToLocal = (requestUrl, targetPath, isGlobal) => __awaiter(this, void 0, void 0, function* () {
             const _this = this;
             const ungz = zlib_1.default.createGunzip();
             const untar = tar_1.default.Extract({ path: targetPath, newer: true });
@@ -72,6 +94,15 @@ class GolangGithubRepo {
             req.on('complete', () => {
                 console.log(`Download the ${_this.name} completed!`);
             });
+            const os = process.platform;
+            if (os === 'win32' && !isGlobal) {
+                const filename = `${targetPath}\\${_this.name}`;
+                fs_1.default.writeFile(filename, windowsBinContent(_this.name), { flag: 'a' }, (err) => {
+                    if (err) {
+                        console.log('Error: ', err);
+                    }
+                });
+            }
         });
         this.removeBinaryFile = (binDir) => {
             console.log('Removing file: ', this.name);
@@ -87,11 +118,11 @@ class GolangGithubRepo {
         this.name = initData.name;
         const jsonH = {
             "Accept": "application/json, text/plain; charset=UTF-8",
-            "User-Agent": 'weeego'
+            "User-Agent": 'wego'
         };
         const streamH = {
             "Accept": "application/octet-stream; charset=UTF-8",
-            "User-Agent": 'weeego'
+            "User-Agent": 'wego'
         };
         if (initData.githubToken) {
             this.githubToken = initData.githubToken;

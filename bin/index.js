@@ -52,7 +52,7 @@ const install = () => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         else {
-            golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir, binaryFileName);
+            golangRepo === null || golangRepo === void 0 ? void 0 : golangRepo.downloadBinaryToLocal(binaryFileRequestUrl, localBinDir.path, localBinDir.isGlobal);
         }
     }
 });
