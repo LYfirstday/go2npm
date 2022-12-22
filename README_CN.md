@@ -61,7 +61,7 @@ npm init -y
     "preuninstall": "go2npm uninstall"
   },
   "devDependencies": {
-    "go2npm": "^1.2.6"
+    "go2npm": "^1.2.9"
   }
 }
 ```

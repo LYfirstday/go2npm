@@ -16,9 +16,9 @@ const common_1 = require("./../constants/common");
 const axios_1 = __importDefault(require("axios"));
 const request_1 = __importDefault(require("request"));
 const zlib_1 = __importDefault(require("zlib"));
-const tar_1 = __importDefault(require("tar"));
 const fs_1 = __importDefault(require("fs"));
-var ProgressBar = require('progress');
+const tar_stream_1 = __importDefault(require("tar-stream"));
+const progress_1 = __importDefault(require("progress"));
 const windowsBinContent = (name) => {
     return `
     #!/usr/bin/env node
@@ -62,9 +62,25 @@ class GolangGithubRepo {
         this.downloadBinaryToLocal = (requestUrl, targetPath, isGlobal) => __awaiter(this, void 0, void 0, function* () {
             const _this = this;
             const ungz = zlib_1.default.createGunzip();
-            const untar = tar_1.default.Extract({ path: targetPath, newer: true });
-            untar.on('error', () => {
-                console.log('Decompression failure: ', _this.name);
+            const extract = tar_stream_1.default.extract();
+            /** save the golang binary file data */
+            let chunks = Buffer.from([]);
+            /** save the binary name */
+            let exeName = '';
+            extract.on('entry', function (header, stream, cb) {
+                exeName = header.name;
+                stream.on('data', function (chunk) {
+                    chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
+                });
+                stream.on('end', function () {
+                    cb();
+                });
+                stream.resume();
+            });
+            extract.on('finish', function () {
+                fs_1.default.writeFile(`${targetPath}${common_1.FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
+                    console.log('Write file error: ', err);
+                });
             });
             const req = request_1.default.get({
                 uri: requestUrl,
@@ -73,7 +89,7 @@ class GolangGithubRepo {
             let bar;
             req.on('response', function (res) {
                 const contentLen = Number(res.headers["content-length"] || 0);
-                bar = new ProgressBar('downloading [:bar] :rate/bps :percent :etas', {
+                bar = new progress_1.default('downloading [:bar] :rate/bps :percent :etas', {
                     complete: '=',
                     incomplete: ' ',
                     width: 20,
@@ -83,7 +99,7 @@ class GolangGithubRepo {
                     return console.log("Error downloading binary. HTTP Status Code: " + res.statusCode);
                 console.log('\n\r');
                 console.log('Downloading the binary file: ', _this.name);
-                req.pipe(ungz).pipe(untar);
+                req.pipe(ungz).pipe(extract);
             });
             req.on('data', res => {
                 bar.tick(res.length);
@@ -106,7 +122,7 @@ class GolangGithubRepo {
         });
         this.removeBinaryFile = (binDir) => {
             console.log('Removing file: ', this.name);
-            fs_1.default.unlink(`${binDir}/${this.name}`, err => {
+            fs_1.default.unlink(`${binDir}${common_1.FileUriSeparator}${this.name}`, err => {
                 if (err)
                     throw err;
                 console.log('Uninstalled ', this.name);

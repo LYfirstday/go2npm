@@ -1,11 +1,12 @@
 import { Go2npm, RepoReleaseList } from "./../types/common";
-import { GITHUB_API_PREFIX } from "./../constants/common";
+import { FileUriSeparator, GITHUB_API_PREFIX } from "./../constants/common";
 import axios from 'axios';
 import request from 'request';
 import zlib from 'zlib';
-import tar from 'tar';
 import fs from 'fs';
-var ProgressBar = require('progress');
+import tarStream from 'tar-stream'
+
+import ProgressBar from 'progress';
 
 const windowsBinContent = (name: string) => {
   return `
@@ -86,10 +87,29 @@ class GolangGithubRepo {
   downloadBinaryToLocal = async (requestUrl: string, targetPath: string, isGlobal: boolean) => {
     const _this = this;
     const ungz = zlib.createGunzip();
-    const untar = tar.Extract({ path: targetPath, newer: true });
 
-    untar.on('error', () => {
-      console.log('Decompression failure: ', _this.name);
+    const extract = tarStream.extract();
+    /** save the golang binary file data */
+    let chunks = Buffer.from([]);
+    /** save the binary name */
+    let exeName = '';
+    extract.on('entry', function(header, stream, cb) {
+      exeName = header.name;
+      stream.on('data', function(chunk) {
+        chunks = Buffer.concat([chunks, Buffer.from(chunk)]);
+      });
+
+      stream.on('end', function() {
+          cb();
+      });
+
+      stream.resume();
+    });
+
+    extract.on('finish', function() {
+      fs.writeFile(`${targetPath}${FileUriSeparator}${exeName}`, chunks, { flag: 'a' }, (err) => {
+        console.log('Write file error: ', err);
+      });
     });
 
     const req = request.get({
@@ -108,7 +128,7 @@ class GolangGithubRepo {
       if (res.statusCode !== 200) return console.log("Error downloading binary. HTTP Status Code: " + res.statusCode);
       console.log('\n\r');
       console.log('Downloading the binary file: ', _this.name);
-      req.pipe(ungz).pipe(untar);
+      req.pipe(ungz).pipe(extract);
     });
     req.on('data', res => {
       bar.tick(res.length);
@@ -133,7 +153,7 @@ class GolangGithubRepo {
 
   removeBinaryFile = (binDir: string) => {
     console.log('Removing file: ', this.name);
-    fs.unlink(`${binDir}/${this.name}`, err => {
+    fs.unlink(`${binDir}${FileUriSeparator}${this.name}`, err => {
       if (err) throw err;
       console.log('Uninstalled ', this.name);
     });
